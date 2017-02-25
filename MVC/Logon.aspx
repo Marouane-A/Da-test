@@ -11,6 +11,7 @@
       <asp:TextBox ID="txtPassword" Runat=server TextMode=Password></asp:TextBox><br>
       <asp:Button ID="btnLogin" Runat=server Text="Login" OnClick="Login_Click"></asp:Button><br>
       <asp:Label ID="errorLabel" Runat=server ForeColor=#ff3300></asp:Label><br>
+         <asp:Label ID="groupsLab" Runat=server ForeColor=#0000ff></asp:Label><br>
       <asp:CheckBox ID=chkPersist Runat=server Text="Persist Cookie" />
     </form>
   </body>
@@ -49,10 +50,12 @@
                 //Response.Redirect(FormsAuthentication.GetRedirectUrl(txtUsername.Text, false));
 
                 errorLabel.Text = errorLabel.Text + " | It works  OrganisationUnit : "+auth.GetOrganisationUnit();
-                //foreach (var item in auth.GetGroups())
-                //{
-                //    errorLabel.Text = errorLabel.Text + "groupe : " + item;
-                //}
+                groupsLab.Text = groupsLab.Text + " |  Count :  | " + auth.GetGroups().Count;
+                foreach (var item in auth.GetGroups())
+                {
+                    groupsLab.Text = groupsLab.Text + "groupe : " + item + " | ";
+                }
+               
             }
             else
             {
