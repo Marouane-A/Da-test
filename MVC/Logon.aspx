@@ -1,5 +1,5 @@
 ﻿<%@ Page language="c#" AutoEventWireup="true" %>
-<%@ Import Namespace="MVC" %>
+<%@ Import Namespace="MVC.AdServices" %>
 <html>
   <body>
     <form id="Login" method="post" runat="server">
@@ -18,34 +18,41 @@
 <script runat=server>
     void Login_Click(Object sender, EventArgs e)
     {
-        String adPath = "LDAP://windowsserverad.devstorm.tn"; //Fully-qualified Domain Name
-        LdapAuthentication adAuth = new LdapAuthentication(adPath,errorLabel);
+
+        String adPath = "LDAP://win-adds.devstorm.tn"; //Fully-qualified Domain Name
+        Authentification auth = new Authentification( txtUsername.Text, txtPassword.Text,adPath);
+        //LdapAuthentication adAuth = new LdapAuthentication(adPath,errorLabel);
         try
         {
-            if(true == adAuth.IsAuthenticated(txtDomain.Text, txtUsername.Text, txtPassword.Text))
+            if(true == auth.IsAuthenticated())
             {
-                String groups = adAuth.GetGroups(txtDomain.Text, txtUsername.Text, txtPassword.Text);
+                //String groups = auth.GetGroups(txtDomain.Text, txtUsername.Text, txtPassword.Text);
 
-                //Create the ticket, and add the groups.
-                bool isCookiePersistent = chkPersist.Checked;
-                FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(1,  txtUsername.Text,
-                DateTime.Now, DateTime.Now.AddMinutes(60), isCookiePersistent, groups);
+                ////Create the ticket, and add the groups.
+                //bool isCookiePersistent = chkPersist.Checked;
+                //FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(1,  txtUsername.Text,
+                //DateTime.Now, DateTime.Now.AddMinutes(60), isCookiePersistent, groups);
 
-                //Encrypt the ticket.
-                String encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+                ////Encrypt the ticket.
+                //String encryptedTicket = FormsAuthentication.Encrypt(authTicket);
 
-                //Create a cookie, and then add the encrypted ticket to the cookie as data.
-                HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+                ////Create a cookie, and then add the encrypted ticket to the cookie as data.
+                //HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
 
-                if(true == isCookiePersistent)
-                authCookie.Expires = authTicket.Expiration;
+                //if(true == isCookiePersistent)
+                //authCookie.Expires = authTicket.Expiration;
 
-                //Add the cookie to the outgoing cookies collection.
-                Response.Cookies.Add(authCookie);
+                ////Add the cookie to the outgoing cookies collection.
+                //Response.Cookies.Add(authCookie);
 
-                //You can redirect now.
-                Response.Redirect(FormsAuthentication.GetRedirectUrl(txtUsername.Text, false));
-                //errorLabel.Text = errorLabel.Text + " | It works";
+                ////You can redirect now.
+                //Response.Redirect(FormsAuthentication.GetRedirectUrl(txtUsername.Text, false));
+
+                errorLabel.Text = errorLabel.Text + " | It works  OrganisationUnit : "+auth.GetOrganisationUnit();
+                //foreach (var item in auth.GetGroups())
+                //{
+                //    errorLabel.Text = errorLabel.Text + "groupe : " + item;
+                //}
             }
             else
             {
@@ -54,7 +61,7 @@
         }
         catch(Exception ex)
         {
-            errorLabel.Text = "Error authenticating. " + ex.Message;
+            errorLabel.Text = "Error authenticating. a" + ex.Message;
         }
     }
 </script>
