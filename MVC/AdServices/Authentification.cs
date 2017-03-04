@@ -77,8 +77,6 @@ namespace MVC.AdServices
 
                 var memberOf = results.Properties[DirectoryAttributes.MemberOf]; // Force evaluation now so you can have a poke about.
 
-
-
                 return memberOf[0].ToString().Contains("CN=" + group);
             }
 
@@ -123,13 +121,10 @@ namespace MVC.AdServices
             DirectoryEntry deUserContainer = deUser.Parent;
             string aa = deUserContainer.Properties["distinguishedName"].Value.ToString();
             string[] one = aa.Split(',');
-            string b;
             foreach (var it in one)
             {
                 if (it.Contains("OU"))
                 {
-
-
                     return it.Replace("OU=", " ");
                 }
             }
@@ -148,24 +143,15 @@ namespace MVC.AdServices
             
             if (results != null)
             {
-
                 var memberOf = results.Properties[DirectoryAttributes.MemberOf]; // Force evaluation now so you can have a poke about.
 
-              
                 string[] groups = memberOf[0].ToString().Split(',');
                 foreach (var item in groups)
                 {
                     if (item.Contains("CN=")) {
-                        _groups.Add(item.Replace("CN=", ""));
-                        
-                    }
-
-                        
-                        
+                        _groups.Add(item.Replace("CN=", ""));   
+                    }       
                 }
-              
-
-
             }
             return _groups;
         }
